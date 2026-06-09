@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADC - Peaje El Sombrero</title>
+    
+    <style>
+        :root {
+            /* Paleta en tonos rojos */
+            --bg-body: #fef2f2;      /* Rojo/Rosado muy claro para el fondo general */
+            --card-bg: #ffffff;      /* Blanco para las tarjetas */
+            --primary: #dc2626;      /* Rojo fuerte para títulos principales */
+            --accent: #f87171;       /* Rojo claro para enfoques y acentos */
+            --success: #15803d;      /* Verde oscuro para texto cuadrado */
+            --info-blue: #1d4ed8;    /* Azul intenso para texto sobrante */
+            --danger: #b91c1c;       /* Rojo oscuro para falta y botón reset */
+            --text: #450a0a;         /* Marrón/Rojo oscuro para el texto normal */
+            --border: #fca5a5;       /* Borde rojo suave */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: 600; /* Letras gruesas en todo el sitio */
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text);
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin: 20px 0;
+            font-size: 1.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        h3 {
+            text-align: center;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 25px;
+        }
+
+        .seccion {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(220, 38, 38, 0.08);
+            border: 1px solid #fee2e2;
+        }
+
+        h2 {
+            font-size: 1.2rem;
+            font-weight: 800;
+            border-bottom: 2px solid var(--bg-body);
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        th, td {
+            padding: 9px;
+            text-align: left;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #fee2e2;
+        }
+
+        th {
+            background: #ffe4e6;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 700;
+            outline: none;
+            color: var(--text);
+            background-color: #fff5f5;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--accent);
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.3);
+        }
+
+        /* Colores específicos para los estados de las diferencias */
+        .cuadrado { 
+            background-color: #d1fae5; 
+            color: var(--success); 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            font-weight: 700; 
+        }
+        .sobra { 
+            background-color: #dbeafe; 
+            color: var(--info-blue); 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            font-weight: 700; 
+        } 
+        .falta { 
+            background-color: #fee2e2; 
+            color: var(--danger); 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            font-weight: 700; 
+        }
+
+        .total-row {
+            background: #fecdd3;
+            font-weight: 700;
+        }
+
+        .btn-reset {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 4px 6px rgba(185, 28, 28, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .btn-reset:hover {
+            background-color: #991b1b;
+        }
+
+        .btn-reset:active {
+            transform: scale(0.98);
+        }
+    </style>
+    <link rel="manifest" href="./manifest.json">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Peaje El Sombrero 🚧</h1>
+        <h3>Tesorera: Fabiola Garcia</h3>
+        
+        <div class="seccion">
+            <h2><i class="fas fa-money-bill-wave"></i>💵 Efectivo</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Denominación</th>
+                        <th>Billetes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>5 Bs</td><td><input type="number" class="EFECTIVO" data-valor="5" min="0" oninput="calcularTodo()"></td></tr>
+                    <tr><td>10 Bs</td><td><input type="number" class="EFECTIVO" data-valor="10" min="0" oninput="calcularTodo()"></td></tr>
+                    <tr><td>20 Bs</td><td><input type="number" class="EFECTIVO" data-valor="20" min="0" oninput="calcularTodo()"></td></tr>
+                    <tr><td>50 Bs</td><td><input type="number" class="EFECTIVO" data-valor="50" min="0" oninput="calcularTodo()"></td></tr>
+                    <tr><td>100 Bs</td><td><input type="number" class="EFECTIVO" data-valor="100" min="0" oninput="calcularTodo()"></td></tr>
+                    <tr><td>200 Bs</td><td><input type="number" class="EFECTIVO" data-valor="200" min="0" oninput="calcularTodo()"></td></tr>
+                    <tr><td>500 Bs</td><td><input type="number" class="EFECTIVO" data-valor="500" min="0" oninput="calcularTodo()"></td></tr>
+                </tbody>
+            </table>
+
+            <table>
+                <thead>
+                    <tr class="total-row">
+                        <td>Físico: <span id="txtEfectivoReal">0.00</span> Bs</td>
+                    </tr>
+                    <tr>
+                        <td>Sistema: <input type="number" id="sysEfectivo" min="0" step="0.01" oninput="calcularTodo()" placeholder="Monto sistema"></td>
+                    </tr>
+                    <tr>
+                        <td>Diferencia: <span id="resEfectivo" class="cuadrado">0.00 Bs</span></td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        
+        <div class="seccion">
+            <h2><i class="fas fa-credit-card"></i>💳 Puntos de Ventas</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>BDV</th>
+                        <th>BDT</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Crédito</td>
+                        <td><input type="number" class="BDV" min="0" step="0.01" oninput="calcularTodo()"></td>
+                        <td><input type="number" class="BDT" min="0" step="0.01" oninput="calcularTodo()"></td>
+                    </tr>
+                    <tr>
+                        <td>Débito</td>
+                        <td><input type="number" class="BDV" min="0" step="0.01" oninput="calcularTodo()"></td>
+                        <td><input type="number" class="BDT" min="0" step="0.01" oninput="calcularTodo()"></td>
+                    </tr>
+                    <tr>
+                        <td>Master/Visa</td>
+                        <td><input type="number" class="BDV" min="0" step="0.01" oninput="calcularTodo()"></td>
+                        <td><input type="number" class="BDT" min="0" step="0.01" oninput="calcularTodo()"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-top: 10px;">
+                <p>
+                    <b>BDV:</b> Real <span id="txtBdvReal">0.00</span> | Sis: <input type="number" id="sysBdv" step="0.01" oninput="calcularTodo()" style="width:80px"> | <span>Diferencia:</span> <span id="resBdv" class="cuadrado">0.00 Bs</span>
+                </p>
+                <hr style="margin:10px 0; border:0; border-top:1px solid #fca5a5;">
+                <p>
+                    <b>BDT:</b> Real <span id="txtBdtReal">0.00</span> | Sis: <input type="number" id="sysBdt" step="0.01" oninput="calcularTodo()" style="width:80px"> | <span>Diferencia:</span> <span id="resBdt" class="cuadrado">0.00 Bs</span>
+                </p>
+            </div>
+        </div>
+
+        <button class="btn-reset" onclick="resetearFormulario()">
+            <i class="fas fa-trash-alt"></i> Resetear Montos
+        </button>
+
+    </div>
+
+    <script>
+        function calcularTodo() {
+            let totalEfectivoFisico = 0;
+            let inputsBilletes = document.querySelectorAll('.EFECTIVO');
+            inputsBilletes.forEach(input => {
+                totalEfectivoFisico += (parseFloat(input.getAttribute('data-valor')) || 0) * (parseInt(input.value) || 0);
+            });
+            document.getElementById('txtEfectivoReal').innerText = totalEfectivoFisico.toFixed(2);
+
+            let totalBdvReal = 0;
+            document.querySelectorAll('.BDV').forEach(i => totalBdvReal += parseFloat(i.value) || 0);
+            document.getElementById('txtBdvReal').innerText = totalBdvReal.toFixed(2);
+
+            let totalBdtReal = 0;
+            document.querySelectorAll('.BDT').forEach(i => totalBdtReal += parseFloat(i.value) || 0);
+            document.getElementById('txtBdtReal').innerText = totalBdtReal.toFixed(2);
+
+            mostrarDiferencia(totalEfectivoFisico, parseFloat(document.getElementById('sysEfectivo').value) || 0, 'resEfectivo');
+            mostrarDiferencia(totalBdvReal, parseFloat(document.getElementById('sysBdv').value) || 0, 'resBdv');
+            mostrarDiferencia(totalBdtReal, parseFloat(document.getElementById('sysBdt').value) || 0, 'resBdt');
+        }
+
+        function mostrarDiferencia(real, sistema, elementoId) {
+            let dif = real - sistema;
+            let elemento = document.getElementById(elementoId);
+            if (Math.abs(dif) < 0.01) {
+                elemento.innerText = "0.00 Bs";
+                elemento.className = "cuadrado";
+            } else if (dif > 0) {
+                elemento.innerText = "Sobra: " + dif.toFixed(2) + " Bs";
+                elemento.className = "sobra";
+            } else {
+                elemento.innerText = "Falta: " + Math.abs(dif).toFixed(2) + " Bs";
+                elemento.className = "falta";
+            }
+        }
+
+        function resetearFormulario() {
+            if (confirm("¿Estás seguro de que deseas borrar todos los datos ingresados?")) {
+                let inputs = document.querySelectorAll('input[type="number"]');
+                inputs.forEach(input => input.value = "");
+                calcularTodo();
+            }
+        }
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('./sw.js').then(function(registration) {
+                    console.log('ServiceWorker registrado con éxito');
+                }, function(err) {
+                    console.log('Error al registrar el ServiceWorker', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
